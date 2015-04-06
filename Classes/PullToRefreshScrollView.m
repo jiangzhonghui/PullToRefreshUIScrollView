@@ -15,8 +15,29 @@
 @synthesize delegate1;
 @synthesize textPull, textRelease, textLoading, refreshHeaderView, refreshLabel, refreshArrow, refreshSpinner;
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+//    NSLog(@"%f",scrollView.contentOffset.y);
+    if (scrollView.contentOffset.y <= -REFRESH_HEADER_HEIGHT) {
+        if(self.refreshLabel.text != self.textRelease){
+            self.refreshLabel.text = self.textRelease;
+            // should rotate the arrow
+            [UIView animateWithDuration:0.2 animations:^{
+                self.refreshArrow.transform = CGAffineTransformRotate(CGAffineTransformIdentity, M_PI);
+            }];
+            
+        }
+    }
+    else{
+        if (self.refreshLabel.text != self.textPull) {
+            [UIView animateWithDuration:0.2 animations:^{
+                self.refreshArrow.transform = CGAffineTransformRotate(CGAffineTransformIdentity, 0);
+            }];
+            self.refreshLabel.text = self.textPull;
+        }
+    }
+}
+
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    //if (isLoading) return;
     isDragging = YES;
 }
 
